@@ -20,7 +20,17 @@ class CreatePersonnages extends \Illuminate\Database\Migrations\Migration
             $table->string("name");
             $table->string("slug");
             $table->text("bio")->nullable();
+            $table->text("signature")->nullable();
+            $table->text("affections")->nullable();
+            $table->text("aversions")->nullable();
+            $table->string("job")->nullable();
             $table->string("title")->nullable();
+            $table->boolean("hide")->default(false);
         });
+    }
+    
+    public function down()
+    {
+        Schema::dropIfExists("personnages");
     }
 }

@@ -6,19 +6,41 @@ use Nicolasey\Personnages\Models\Personnage;
 
 class PersonnageController extends Controller
 {
+    /**
+     * Get all personnages
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|Personnage[]
+     */
     public function index()
     {
         return Personnage::all();
     }
 
+    /**
+     * Get all personnages from an owner
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function byOwner(int $id)
+    {
+        return Personnage::of($id)->active(true)->get();
+    }
+
+    /**
+     * Show a personnage
+     *
+     * @param Personnage $personnage
+     * @return Personnage
+     */
     public function show(Personnage $personnage)
     {
         return $personnage;
     }
-
+    
     public function store()
     {
-        //
+
     }
 
     public function update(Personnage $personnage)
