@@ -41,7 +41,7 @@ class Personnage extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function owner()
     {
         return $this->belongsTo(config("personnages.owner.class"), "owner");
     }
@@ -68,5 +68,17 @@ class Personnage extends Model
     public function scopeActive($query, $bool)
     {
         return $query->where('active', $bool);
+    }
+
+    /**
+     * Select by owner
+     *
+     * @param $query
+     * @param $id
+     * @return mixed
+     */
+    public function scopeOf($query, $id)
+    {
+        return $query->where('owner', $id);
     }
 }
