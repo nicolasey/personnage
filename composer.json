@@ -37,8 +37,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nicolasey\\Personnage\\PersonnageServiceProvider",
-                "Nicolasey\\Personnage\\PersonnageEventServiceProvider"
+                "Nicolasey\\Personnages\\PersonnageServiceProvider",
+                "Nicolasey\\Personnages\\PersonnageEventServiceProvider"
             ]
         }
     },
