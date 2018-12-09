@@ -3,12 +3,14 @@ namespace Nicolasey\Personnages\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Personnage extends Model
+class Personnage extends Model implements HasMedia
 {
-    use SoftDeletes, HasSlug;
+    use SoftDeletes, HasSlug, HasMediaTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +19,7 @@ class Personnage extends Model
      */
     protected $guarded = ['alive'];
 
-    protected $hidden = ["deleted_at", "user_id"];
+    protected $hidden = ["deleted_at", "owner"];
 
     public static $rules = [
         "name" => "unique:personnages|min:3|required",

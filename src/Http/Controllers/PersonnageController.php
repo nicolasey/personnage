@@ -38,16 +38,57 @@ class PersonnageController extends Controller
         return $personnage;
     }
 
+    /**
+     * Create a personnage
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function store()
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
-        if(request()->file("avatar"))
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner"]);
+
+        try {
+            $personnage = Personnage::create($data);
+
+            /**
+             * If there is an avatar, attach it to newly created personnage
+             */
+            if(request()->file("avatar")) {
+                $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+            }
+
+            return response()->json($personnage);
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
+    /**
+     * Update a personnage
+     *
+     * @param Personnage $personnage
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function update(Personnage $personnage)
     {
         $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
 
+        try {
+            $personnage->update($data);
+
+            /**
+             * If there is an avatar, attach it to newly created personnage
+             */
+            if(request()->file("avatar")) {
+                $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+            }
+
+            return response()->json($personnage);
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**
