@@ -37,20 +37,32 @@ class PersonnageController extends Controller
     {
         return $personnage;
     }
-    
+
     public function store()
     {
-
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
+        if(request()->file("avatar"))
     }
 
     public function update(Personnage $personnage)
     {
-        //
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
+
     }
 
+    /**
+     * Delete a personnage
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
     public function destroy(Personnage $personnage)
     {
-
+        try {
+            $personnage->delete();
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**
