@@ -6,6 +6,7 @@ use Nicolasey\Personnages\Events\PersonnageActivated;
 use Nicolasey\Personnages\Events\PersonnageDeactivated;
 use Nicolasey\Personnages\Events\PersonnageKilled;
 use Nicolasey\Personnages\Events\PersonnageResurrected;
+use Nicolasey\Personnages\Events\PersonnageUpdated;
 use Nicolasey\Personnages\Models\Personnage;
 
 class PersonnageController extends Controller

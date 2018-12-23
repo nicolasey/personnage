@@ -3,6 +3,9 @@ namespace Nicolasey\Personnages\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nicolasey\Personnages\Events\PersonnageCreated;
+use Nicolasey\Personnages\Events\PersonnageDeleted;
+use Nicolasey\Personnages\Events\PersonnageUpdated;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Sluggable\HasSlug;
@@ -24,6 +27,12 @@ class Personnage extends Model implements HasMedia
     public static $rules = [
         "name" => "unique:personnages|min:3|required",
         "owner" => "required",
+    ];
+
+    protected $dispatchesEvents = [
+        "created" => PersonnageCreated::class,
+        "updated" => PersonnageUpdated::class,
+        "deleted" => PersonnageDeleted::class,
     ];
 
     /**
