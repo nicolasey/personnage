@@ -2,6 +2,10 @@
 namespace Nicolasey\Personnages\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Nicolasey\Personnages\Events\PersonnageActivated;
+use Nicolasey\Personnages\Events\PersonnageDeactivated;
+use Nicolasey\Personnages\Events\PersonnageKilled;
+use Nicolasey\Personnages\Events\PersonnageResurrected;
 use Nicolasey\Personnages\Models\Personnage;
 
 class PersonnageController extends Controller
@@ -117,6 +121,8 @@ class PersonnageController extends Controller
     {
         try {
             $personnage->update(['active' => true]);
+
+            event(new PersonnageActivated($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -134,6 +140,8 @@ class PersonnageController extends Controller
     {
         try {
             $personnage->update(['active' => false]);
+
+            event(new PersonnageDeactivated($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -153,6 +161,8 @@ class PersonnageController extends Controller
             Personnage::unguard();
             $personnage->update(['alive' => false, 'active' => false]);
             Personnage::reguard();
+
+            event(new PersonnageKilled($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -172,6 +182,8 @@ class PersonnageController extends Controller
             Personnage::unguard();
             $personnage->update(['alive' => true, 'active' => false]);
             Personnage::reguard();
+
+            event(new PersonnageResurrected($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
