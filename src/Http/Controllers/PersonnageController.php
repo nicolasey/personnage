@@ -76,7 +76,7 @@ class PersonnageController extends Controller
      */
     public function update(Personnage $personnage)
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "current"]);
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
 
         try {
             $personnage->update($data);
