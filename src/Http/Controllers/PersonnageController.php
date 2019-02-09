@@ -3,6 +3,7 @@ namespace Nicolasey\Personnage\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Nicolasey\Personnage\Models\Personnage;
+use DB;
 
 class PersonnageController extends Controller
 {
@@ -229,8 +230,12 @@ class PersonnageController extends Controller
      */
     private function setAllPersonnageNotCurrent(Personnage $personnage)
     {
-        $owner = $personnage->owner;
+        // Get owner object
+        $owner =  config("personnage.owner.class");
+        $owner = new $owner;
+        $owner = $owner::findOrFail($personnage->owner);
 
+        // Set not current to all its personnages
         try {
             DB::beginTransaction();
             foreach ($owner->personnages as $pj) {
