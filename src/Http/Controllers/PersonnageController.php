@@ -184,6 +184,7 @@ class PersonnageController extends Controller
      * Change current personnage to given one for owner
      *
      * @param Personnage $personnage
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
     public function change(Personnage $personnage)
