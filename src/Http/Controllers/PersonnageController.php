@@ -58,11 +58,7 @@ class PersonnageController extends Controller
                 $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
 
-            /**
-             * Set default personnage to the first personnage
-             */
-            $owner = request()->input('owner');
-            $this->setDefaultCreatedPersonnage($owner);
+            $this->changeCurrentPersonnage($personnage);
 
             return response()->json($personnage);
         } catch (\Exception $exception) {
@@ -191,6 +187,18 @@ class PersonnageController extends Controller
      * @throws \Exception
      */
     public function change(Personnage $personnage)
+    {
+        $this->changeCurrentPersonnage($personnage);
+        return response()->json($personnage);
+    }
+
+    /**
+     * Change current personnage to given one
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
+    private function changeCurrentPersonnage(Personnage $personnage)
     {
         $this->setAllPersonnageNotCurrent($personnage);
         $this->setCurrentPersonnage($personnage);
