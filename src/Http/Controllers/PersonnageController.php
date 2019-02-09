@@ -46,7 +46,7 @@ class PersonnageController extends Controller
      */
     public function store()
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner"]);
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner", "current"]);
 
         try {
             $personnage = Personnage::create($data);
@@ -57,6 +57,12 @@ class PersonnageController extends Controller
             if(request()->file("avatar")) {
                 $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
+
+            /**
+             * Set default personnage to the first personnage
+             */
+            $owner = request()->input('owner');
+            $this->setDefaultCreatedPersonnage($owner);
 
             return response()->json($personnage);
         } catch (\Exception $exception) {
@@ -73,7 +79,7 @@ class PersonnageController extends Controller
      */
     public function update(Personnage $personnage)
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide"]);
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "current"]);
 
         try {
             $personnage->update($data);
@@ -176,5 +182,57 @@ class PersonnageController extends Controller
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * Change current personnage to given one for owner
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
+    public function change(Personnage $personnage)
+    {
+        $this->setAllPersonnageNotCurrent($personnage);
+        $this->setCurrentPersonnage($personnage);
+    }
+
+    /**
+     * Set current personnage
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
+    private function setCurrentPersonnage(Personnage $personnage)
+    {
+        try {
+            $personnage->current = true;
+            $personnage->save();
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    /**
+     * Set all personnage to not so current
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
+    private function setAllPersonnageNotCurrent(Personnage $personnage)
+    {
+        $owner = $personnage->owner;
+
+        try {
+            DB::beginTransaction();
+            foreach ($owner->personnages as $pj) {
+                $pj->current = false;
+                $pj->save();
+            }
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+
+        DB::commit();
     }
 }
