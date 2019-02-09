@@ -1,6 +1,6 @@
 {
-    "name": "nicolasey/personnages",
-    "description": "Personnages package for RolePlay Games",
+    "name": "nicolasey/personnage",
+    "description": "Personnage package for RolePlay Games",
     "type": "library",
     "authors": [
         {
@@ -12,16 +12,16 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Nicolasey\\Personnages\\": "src/"
+            "Nicolasey\\Personnage\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Nicolasey\\Personnages\\Tests\\": "tests/"
+            "Nicolasey\\Personnage\\Tests\\": "tests/"
         }
     },
     "require": {
-        "php": ">7.2.0",
+        "php": "^7.1.3",
         "illuminate/database": "~5.6|~5.7",
         "illuminate/events": "~5.6|~5.7",
         "illuminate/routing": "~5.6|~5.7",
@@ -37,8 +37,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nicolasey\\Personnages\\PersonnageServiceProvider",
-                "Nicolasey\\Personnages\\PersonnageEventServiceProvider"
+                "Nicolasey\\Personnage\\PersonnageServiceProvider",
+                "Nicolasey\\Personnage\\PersonnageEventServiceProvider"
             ]
         }
     },

@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnages\Models;
+namespace Nicolasey\Personnage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

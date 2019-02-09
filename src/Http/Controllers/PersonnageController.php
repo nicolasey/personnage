@@ -1,8 +1,8 @@
 <?php
-namespace Nicolasey\Personnages\Http\Controllers;
+namespace Nicolasey\Personnage\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Nicolasey\Personnages\Models\Personnage;
+use Nicolasey\Personnage\Models\Personnage;
 
 class PersonnageController extends Controller
 {
