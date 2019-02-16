@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnages\Tests;
+namespace Nicolasey\Personnage\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\TestCase as Base;
@@ -29,8 +29,8 @@ abstract class TestCase extends Base
     protected function getPackageProviders($app)
     {
         return [
-            \Nicolasey\Personnages\PersonnageServiceProvider::class,
-            \Nicolasey\Personnages\PersonnageEventServiceProvider::class,
+            \Nicolasey\Personnage\PersonnageServiceProvider::class,
+            \Nicolasey\Personnage\PersonnageEventServiceProvider::class,
         ];
     }
 
