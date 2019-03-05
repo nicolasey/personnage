@@ -3,6 +3,7 @@ namespace Nicolasey\Personnage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Sluggable\HasSlug;
@@ -10,7 +11,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Personnage extends Model implements HasMedia
 {
-    use SoftDeletes, HasSlug, HasMediaTrait;
+    use SoftDeletes, HasSlug, HasMediaTrait, HasRolesAndAbilities;
 
     /**
      * The attributes that are mass assignable.
