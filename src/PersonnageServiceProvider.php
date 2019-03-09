@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnage;
+namespace Nicolasey\Personnages;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;

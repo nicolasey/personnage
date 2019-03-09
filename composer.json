@@ -15,12 +15,12 @@
             "database/factories"
         ],
         "psr-4": {
-            "Nicolasey\\Personnage\\": "src/"
+            "Nicolasey\\Personnages\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Nicolasey\\Personnage\\Tests\\": "tests/"
+            "Nicolasey\\Personnages\\Tests\\": "tests/"
         }
     },
     "require": {
@@ -41,8 +41,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nicolasey\\Personnage\\PersonnageServiceProvider",
-                "Nicolasey\\Personnage\\PersonnageEventServiceProvider"
+                "Nicolasey\\Personnages\\PersonnageServiceProvider",
+                "Nicolasey\\Personnages\\PersonnageEventServiceProvider"
             ]
         }
     },

@@ -1,11 +1,12 @@
 <?php
-namespace Nicolasey\Personnage\Models;
+namespace Nicolasey\Personnages\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Nicolasey\Personnages\Events\PersonnageCreated;
 use Nicolasey\Personnages\Events\PersonnageDeleted;
 use Nicolasey\Personnages\Events\PersonnageUpdated;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Sluggable\HasSlug;

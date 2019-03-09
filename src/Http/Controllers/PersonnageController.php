@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnage\Http\Controllers;
+namespace Nicolasey\Personnages\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Nicolasey\Personnages\Events\PersonnageActivated;
@@ -64,8 +64,6 @@ class PersonnageController extends Controller
                 $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
 
-            $this->changeCurrentPersonnage($personnage);
-
             return response()->json($personnage);
         } catch (\Exception $exception) {
             throw $exception;
@@ -93,6 +91,7 @@ class PersonnageController extends Controller
                 $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
 
+            event(new PersonnageUpdated($personnage));
             return response()->json($personnage);
         } catch (\Exception $exception) {
             throw $exception;
