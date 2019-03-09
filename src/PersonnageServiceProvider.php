@@ -3,21 +3,22 @@ namespace Nicolasey\Personnage;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 
 class PersonnageServiceProvider extends ServiceProvider
 {
-    protected $namespace = "Nicolasey\Personnage\Http\Controllers";
+    protected $namespace = "Nicolasey\Personnages\Http\Controllers";
 
     public function boot()
     {
-        $this->setConfig(__DIR__."/../config.php", "personnage");
+        $this->setConfig(__DIR__."/../config.php", "personnages");
         $this->mapApiRoutes();
         $this->loadMigrationsFrom(__DIR__."/../database/migrations");
     }
 
     public function register()
     {
-
+        $this->registerEloquentFactoriesFrom(__DIR__."/../database/factories");
     }
 
     /**
@@ -51,5 +52,16 @@ class PersonnageServiceProvider extends ServiceProvider
             ->group(function () {
                 require __DIR__.'/Http/routes/api.php';
             });
+    }
+
+    /**
+     * Register factories.
+     *
+     * @param  string  $path
+     * @return void
+     */
+    protected function registerEloquentFactoriesFrom($path)
+    {
+        $this->app->make(EloquentFactory::class)->load($path);
     }
 }

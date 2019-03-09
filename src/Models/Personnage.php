@@ -3,7 +3,9 @@ namespace Nicolasey\Personnage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Nicolasey\Personnages\Events\PersonnageCreated;
+use Nicolasey\Personnages\Events\PersonnageDeleted;
+use Nicolasey\Personnages\Events\PersonnageUpdated;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Sluggable\HasSlug;
@@ -27,6 +29,12 @@ class Personnage extends Model implements HasMedia
         "owner" => "required",
     ];
 
+    protected $dispatchesEvents = [
+        "created" => PersonnageCreated::class,
+        "updated" => PersonnageUpdated::class,
+        "deleted" => PersonnageDeleted::class,
+    ];
+
     /**
      * Get the options for generating the slug.
      * 
@@ -46,7 +54,7 @@ class Personnage extends Model implements HasMedia
      */
     public function owner()
     {
-        return $this->belongsTo(config("personnages.owner.class"), "owner");
+        return $this->belongsTo(config("personnages.owner.class"), "owner_id");
     }
 
     /**
@@ -82,6 +90,33 @@ class Personnage extends Model implements HasMedia
      */
     public function scopeOf($query, $id)
     {
-        return $query->where('owner', $id);
+        return $query->where('owner_id', $id);
+    }
+
+    /**
+     * Set active to this personnage as given boolean
+     *
+     * @param bool $active
+     * @throws \Exception
+     */
+    public function setActive(bool $active)
+    {
+        try {
+            $this->active = $active;
+            $this->save();
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function($model) {
+            $personnages = $model->owner->personnages;
+            foreach ($personnages as $personnage) $personnage->setActive(false);
+            $model->setActive(true);
+        });
     }
 }

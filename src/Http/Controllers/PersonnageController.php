@@ -2,7 +2,12 @@
 namespace Nicolasey\Personnage\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Nicolasey\Personnage\Models\Personnage;
+use Nicolasey\Personnages\Events\PersonnageActivated;
+use Nicolasey\Personnages\Events\PersonnageDeactivated;
+use Nicolasey\Personnages\Events\PersonnageKilled;
+use Nicolasey\Personnages\Events\PersonnageResurrected;
+use Nicolasey\Personnages\Events\PersonnageUpdated;
+use Nicolasey\Personnages\Models\Personnage;
 use DB;
 
 class PersonnageController extends Controller
@@ -47,7 +52,7 @@ class PersonnageController extends Controller
      */
     public function store()
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner", "current"]);
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner_id"]);
 
         try {
             $personnage = Personnage::create($data);
@@ -120,6 +125,8 @@ class PersonnageController extends Controller
     {
         try {
             $personnage->update(['active' => true]);
+
+            event(new PersonnageActivated($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -137,6 +144,8 @@ class PersonnageController extends Controller
     {
         try {
             $personnage->update(['active' => false]);
+
+            event(new PersonnageDeactivated($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -156,6 +165,8 @@ class PersonnageController extends Controller
             Personnage::unguard();
             $personnage->update(['alive' => false, 'active' => false]);
             Personnage::reguard();
+
+            event(new PersonnageKilled($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -175,6 +186,8 @@ class PersonnageController extends Controller
             Personnage::unguard();
             $personnage->update(['alive' => true, 'active' => false]);
             Personnage::reguard();
+
+            event(new PersonnageResurrected($personnage));
             return $personnage;
         } catch (\Exception $exception) {
             throw $exception;
@@ -182,71 +195,23 @@ class PersonnageController extends Controller
     }
 
     /**
-     * Change current personnage to given one for owner
-     *
-     * @param Personnage $personnage
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
-     */
-    public function change(Personnage $personnage)
-    {
-        $this->changeCurrentPersonnage($personnage);
-        return response()->json($personnage);
-    }
-
-    /**
-     * Change current personnage to given one
+     * Personnage switch (in case owner has several)
      *
      * @param Personnage $personnage
      * @throws \Exception
      */
-    private function changeCurrentPersonnage(Personnage $personnage)
+    public function changeTo(Personnage $personnage)
     {
-        $this->setAllPersonnageNotCurrent($personnage);
-        $this->setCurrentPersonnage($personnage);
-    }
-
-    /**
-     * Set current personnage
-     *
-     * @param Personnage $personnage
-     * @throws \Exception
-     */
-    private function setCurrentPersonnage(Personnage $personnage)
-    {
+        DB::beginTransaction();
         try {
-            $personnage->current = true;
-            $personnage->save();
-        } catch (\Exception $exception) {
-            throw $exception;
-        }
-    }
+            $personnages = $personnage->owner->personnages;
+            foreach ($personnages as $pj) $pj->setActive(false);
 
-    /**
-     * Set all personnage to not so current
-     *
-     * @param Personnage $personnage
-     * @throws \Exception
-     */
-    private function setAllPersonnageNotCurrent(Personnage $personnage)
-    {
-        // Get owner object
-        $owner =  config("personnage.owner.class");
-        $owner = new $owner;
-        $owner = $owner::findOrFail($personnage->owner);
-
-        // Set not current to all its personnages
-        try {
-            DB::beginTransaction();
-            foreach ($owner->personnages as $pj) {
-                $pj->current = false;
-                $pj->save();
-            }
+            $personnage->setActive(true);
+            DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
             throw $exception;
         }
-
-        DB::commit();
     }
 }

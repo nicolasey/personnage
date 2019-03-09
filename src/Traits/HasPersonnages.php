@@ -10,6 +10,6 @@ trait HasPersonnages
      */
     public function personnages()
     {
-        return $this->hasMany(\Nicolasey\Personnage\Models\Personnage::class, "owner");
+        return $this->hasMany(Personnage::class, "owner_id");
     }
 }
