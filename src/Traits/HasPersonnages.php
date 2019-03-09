@@ -1,6 +1,8 @@
 <?php
 namespace Nicolasey\Personnages\Traits;
 
+use Nicolasey\Personnages\Models\Personnage;
+
 trait HasPersonnages
 {
     /**
@@ -11,5 +13,10 @@ trait HasPersonnages
     public function personnages()
     {
         return $this->hasMany(Personnage::class, "owner_id");
+    }
+
+    public function activePersonnage()
+    {
+        return $this->hasMany(Personnage::class, "owner_id")->where("active", true);
     }
 }
