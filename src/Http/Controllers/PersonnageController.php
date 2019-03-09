@@ -3,7 +3,9 @@ namespace Nicolasey\Personnages\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Nicolasey\Personnages\Events\PersonnageActivated;
+use Nicolasey\Personnages\Events\PersonnageCreated;
 use Nicolasey\Personnages\Events\PersonnageDeactivated;
+use Nicolasey\Personnages\Events\PersonnageDeleted;
 use Nicolasey\Personnages\Events\PersonnageKilled;
 use Nicolasey\Personnages\Events\PersonnageResurrected;
 use Nicolasey\Personnages\Events\PersonnageUpdated;
@@ -75,6 +77,7 @@ class PersonnageController extends Controller
                 $personnage->addMediaFromRequest('avatar')->toMediaCollection('avatars');
             }
 
+            event(new PersonnageCreated($personnage));
             return response()->json($personnage);
         } catch (\Exception $exception) {
             throw $exception;
@@ -129,6 +132,8 @@ class PersonnageController extends Controller
 
                 if($otherPersonnages) $otherPersonnages->first()->setActive(true);
             }
+
+            event(new PersonnageDeleted($personnage));
         } catch (\Exception $exception) {
             throw $exception;
         }
