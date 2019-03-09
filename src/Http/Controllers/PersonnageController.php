@@ -119,6 +119,16 @@ class PersonnageController extends Controller
     {
         try {
             $personnage->delete();
+
+            if($personnage->active) {
+                $personnage->setActive(false);
+
+                $otherPersonnages = $personnage->owner->personnages->filter(function($item) use($personnage) {
+                    return $item->id !== $personnage->id;
+                });
+
+                if($otherPersonnages) $otherPersonnages->first()->setActive(true);
+            }
         } catch (\Exception $exception) {
             throw $exception;
         }
@@ -196,6 +206,8 @@ class PersonnageController extends Controller
             Personnage::unguard();
             $personnage->update(['alive' => true, 'active' => false]);
             Personnage::reguard();
+
+            $this->changeTo($personnage);
 
             event(new PersonnageResurrected($personnage));
             return $personnage;
