@@ -28,9 +28,20 @@ class PersonnageController extends Controller
      * @param int $id
      * @return mixed
      */
-    public function byOwner(int $id)
+    public function byOwnerActive(int $id)
     {
         return Personnage::of($id)->active(true)->get();
+    }
+
+    /**
+     * Get all personnages from an owner
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function byOwner(int $id)
+    {
+        return Personnage::of($id)->get();
     }
 
     /**
