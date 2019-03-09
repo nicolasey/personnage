@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnages;
+namespace Nicolasey\Personnage;
 
 use Illuminate\Events\EventServiceProvider;
 

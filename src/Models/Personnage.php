@@ -1,5 +1,5 @@
 <?php
-namespace Nicolasey\Personnages\Models;
+namespace Nicolasey\Personnage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +13,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Personnage extends Model implements HasMedia
 {
-    use SoftDeletes, HasSlug, HasMediaTrait;
+    use SoftDeletes, HasSlug, HasMediaTrait, HasRolesAndAbilities;
 
     /**
      * The attributes that are mass assignable.

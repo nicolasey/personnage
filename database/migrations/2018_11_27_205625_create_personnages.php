@@ -26,6 +26,7 @@ class CreatePersonnages extends \Illuminate\Database\Migrations\Migration
             $table->string("job")->nullable();
             $table->string("title")->nullable();
             $table->boolean("hide")->default(false);
+            $table->boolean("current")->default(false);
         });
     }
     

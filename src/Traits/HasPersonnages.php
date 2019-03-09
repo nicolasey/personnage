@@ -1,7 +1,5 @@
 <?php
-namespace Nicolasey\Personnages\Traits;
-
-use Nicolasey\Personnages\Models\Personnage;
+namespace Nicolasey\Personnage\Traits;
 
 trait HasPersonnages
 {
