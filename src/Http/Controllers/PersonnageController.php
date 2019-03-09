@@ -8,6 +8,7 @@ use Nicolasey\Personnages\Events\PersonnageKilled;
 use Nicolasey\Personnages\Events\PersonnageResurrected;
 use Nicolasey\Personnages\Events\PersonnageUpdated;
 use Nicolasey\Personnages\Models\Personnage;
+use DB;
 
 class PersonnageController extends Controller
 {
@@ -187,6 +188,27 @@ class PersonnageController extends Controller
             event(new PersonnageResurrected($personnage));
             return $personnage;
         } catch (\Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    /**
+     * Personnage switch (in case owner has several)
+     *
+     * @param Personnage $personnage
+     * @throws \Exception
+     */
+    public function changeTo(Personnage $personnage)
+    {
+        DB::beginTransaction();
+        try {
+            $personnages = $personnage->owner->personnages;
+            foreach ($personnages as $pj) $pj->setActive(false);
+
+            $personnage->setActive(true);
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
             throw $exception;
         }
     }

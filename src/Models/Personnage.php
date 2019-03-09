@@ -92,4 +92,31 @@ class Personnage extends Model implements HasMedia
     {
         return $query->where('owner_id', $id);
     }
+
+    /**
+     * Set active to this personnage as given boolean
+     *
+     * @param bool $active
+     * @throws \Exception
+     */
+    public function setActive(bool $active)
+    {
+        try {
+            $this->active = $active;
+            $this->save();
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function($model) {
+            $personnages = $model->owner->personnages;
+            foreach ($personnages as $personnage) $personnage->setActive(false);
+            $model->setActive(true);
+        });
+    }
 }
