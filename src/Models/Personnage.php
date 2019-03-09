@@ -54,7 +54,7 @@ class Personnage extends Model implements HasMedia
      */
     public function owner()
     {
-        return $this->belongsTo(config("personnages.owner.class"), "owner");
+        return $this->belongsTo(config("personnages.owner.class"), "owner_id");
     }
 
     /**
@@ -90,6 +90,6 @@ class Personnage extends Model implements HasMedia
      */
     public function scopeOf($query, $id)
     {
-        return $query->where('owner', $id);
+        return $query->where('owner_id', $id);
     }
 }

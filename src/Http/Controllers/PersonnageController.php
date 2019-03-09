@@ -51,7 +51,7 @@ class PersonnageController extends Controller
      */
     public function store()
     {
-        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner"]);
+        $data = request()->only(["name", "bio", "signature", "aversions", "affections", "job", "title", "hide", "owner_id"]);
 
         try {
             $personnage = Personnage::create($data);

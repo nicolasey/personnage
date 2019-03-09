@@ -12,6 +12,6 @@ trait HasPersonnages
      */
     public function personnages()
     {
-        return $this->hasMany(Personnage::class, "owner");
+        return $this->hasMany(Personnage::class, "owner_id");
     }
 }

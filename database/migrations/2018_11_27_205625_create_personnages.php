@@ -12,7 +12,7 @@ class CreatePersonnages extends \Illuminate\Database\Migrations\Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unsignedMediumInteger("owner");
+            $table->unsignedMediumInteger("owner_id");
 
             $table->boolean("active")->default(true);
             $table->boolean("isStaff")->default(false);
